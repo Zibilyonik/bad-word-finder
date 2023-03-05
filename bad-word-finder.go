@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	var file_name, word string
+	var file_name, sentence string
 	fmt.Scan(&file_name)
 	file, err := os.Open(file_name)
 	if err != nil {
@@ -24,19 +24,24 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-
 	for true {
-		fmt.Scan(&word)
-		lowered := strings.ToLower(word)
-		if lowered == "exit" {
+		var final string
+		fmt.Scan(&sentence)
+		arr := strings.Split(sentence, " ")
+		if sentence == "exit" {
 			fmt.Println("Bye!")
 			return
 		}
-		if _, ok := word_map[lowered]; ok {
-			stars := strings.Repeat("*", len(word))
-			fmt.Println(stars)
-		} else {
-			fmt.Println(word)
+		for _, word := range arr {
+			lowered := strings.ToLower(word)
+			if _, ok := word_map[lowered]; ok {
+				stars := strings.Repeat("*", len(word))
+				final += stars + " "
+			} else {
+				final += word + " "
+			}
 		}
+		fmt.Println(strings.TrimSuffix(final, " "))
+
 	}
 }
