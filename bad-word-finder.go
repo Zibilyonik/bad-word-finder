@@ -16,22 +16,27 @@ func main() {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	fmt.Scan(&word)
+	word_map := map[string]struct{}{}
 	scanner := bufio.NewScanner(file)
-
-	// first step of the project
-	// for scanner.Scan() {
-	// 	fmt.Println(scanner.Text())
-	// }
-
 	for scanner.Scan() {
-		if strings.ToLower(scanner.Text()) == strings.ToLower(word) {
-			fmt.Println("true")
-			return
-		}
+		word_map[scanner.Text()] = struct{}{}
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("false")
+
+	for true {
+		fmt.Scan(&word)
+		lowered := strings.ToLower(word)
+		if lowered == "exit" {
+			fmt.Println("Bye!")
+			return
+		}
+		if _, ok := word_map[lowered]; ok {
+			stars := strings.Repeat("*", len(word))
+			fmt.Println(stars)
+		} else {
+			fmt.Println(word)
+		}
+	}
 }
